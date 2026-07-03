@@ -1,0 +1,17 @@
+# playbook-kubectl.yml
+---
+- name: 로컬 PC에서 K8s로 Cloudflare 터널 및 앱 배포하기
+  hosts: localhost     
+  connection: local     
+  gather_facts: false  
+
+  tasks:
+    - name: 1. Cloudflare 터널 토큰을 K8s Secret으로 생성 ( 덮어쓰기)
+      shell: |
+        kubectl create secret generic tunnel-credentials \
+          --from-literal=token={{ tunnel_token }} \
+          --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: 2. Cloudflared 파드 및 K8s 매니페스트 배포
+      shell: |
+        kubectl apply -f deploy-cloudflared.yaml
