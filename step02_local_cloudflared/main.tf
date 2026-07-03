@@ -84,10 +84,10 @@ resource "cloudflare_tunnel_config" "vmware_config" {
     ingress_rule {
       hostname = var.domain_name
       # 인그래스 컨트롤러로 전달
-      # service  = "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local:80" 
+      service  = "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local:80" 
 
       # local cluster의 svc 중 default ns 에 있는 nginx-svc라는 이름의 서비스로 전달
-      service  = "http://nginx-svc.default.svc.cluster.local:80"
+      # service  = "http://nginx-svc.default.svc.cluster.local:80"
     }
     
     # 마지막 규칙: 매칭되는 도메인이 없으면 404 에러 반환 (필수 설정)

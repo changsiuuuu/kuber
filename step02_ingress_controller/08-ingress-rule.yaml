@@ -1,0 +1,35 @@
+# 08-ingress-rule.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rule
+spec:
+  # 배포한 ingress-controller 와 연결고리가 되는 ingressClassName: nginx
+  ingressClassName: nginx
+  rules:
+    - host: leechs.shop
+      http:
+        # nginx 는 L7 장비라서 요청경로, 요청 URL 등의 정보를 모두 인식할수있다
+        paths:
+          - path: /market
+            pathType: Prefix # /market 이라는 접두어로 인식, 뒤에 다른경로가 추가되어도 된다
+            backend:
+              service:
+                name: svc-market-app # market pod로 갈수있는 서비스의 이름 명시
+                port:
+                  number: 8000
+          - path: /posts
+            pathType: Prefix # /post 이라는 접두어로 인식, 뒤에 다른경로가 추가되어도 된다
+            backend:
+              service:
+                name: svc-post-app
+                port:
+                  number: 8000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-index-app
+                port:
+                  number: 80
+          

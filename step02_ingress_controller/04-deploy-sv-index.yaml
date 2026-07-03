@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: index-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: index-app
+  template:
+    metadata:
+      labels:
+        app: index-app
+    spec:
+      containers:
+      - name: index-ctn
+        image: changsiuuuu/index-app:2.0  
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "64Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-index-app  # 인그레스가 바라볼 고유 사설 간판 이름
+spec:
+  type: ClusterIP       
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: index-app
