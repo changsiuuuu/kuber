@@ -1,0 +1,20 @@
+# terraform_example/.gitignore 파일
+
+
+# .gitignore
+# Local .terraform directories
+**/.terraform/*
+.terraform.lock.hcl
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+
+# Crash log files
+crash.log
+
+# tfvars 인증키와 민감한 정보가 있음
+terraform.tfvars
+
+*.bck
