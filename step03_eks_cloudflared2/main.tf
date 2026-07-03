@@ -122,3 +122,9 @@ resource "null_resource" "install_cloudflared_pod" {
       EOF
     }
 }
+
+output "tunnel_real_token" {
+  description = "Cloudflare Tunnel Token"
+  value       = cloudflare_tunnel.eks_tunnel.tunnel_token
+  sensitive   = true  
+}

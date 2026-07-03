@@ -1,0 +1,31 @@
+# deploy-cloudflared.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflared
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+      - name: cloudflared
+        # 제공 이미지
+        image: cloudflare/cloudflared:latest
+        args:
+        - tunnel
+        - --no-autoupdate # 자체 자동 업데이트 차단
+        - run
+        env:
+        - name: TUNNEL_TOKEN
+          valueFrom:
+            # 시크릿으로부터 토큰 주입받기
+            secretKeyRef:
+              name: tunnel-credentials
+              key: token
