@@ -1,0 +1,12 @@
+---
+# Source: syntax-study/templates/deploy.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: test
+data:
+    # 문자열이 들어있는 배열을 순회하면서 원하는 내용출력하기
+    # . 형식으로 현재 item을 참조 할 수 있다
+    domain-www: "www.leechs.shop"
+    domain-mail: "mail.leechs.shop"
+    domain-argocd: "argocd.leechs.shop"

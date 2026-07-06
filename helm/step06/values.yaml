@@ -1,0 +1,6 @@
+subdomains:
+  - "aaa"
+  - "bbb"
+  - "ccc"
+
+globalSuffix: "site"

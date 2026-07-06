@@ -1,0 +1,6 @@
+# values.yaml
+
+subdomains:
+  - "www"
+  - "mail"
+  - "argocd"

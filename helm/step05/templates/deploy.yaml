@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: step5-range-map
+data:
+  # servicePorts 내부의 모든 Key와 Value를 순회합니다.
+  {{- range $key, $val := .Values.servicePorts }}
+  service-{{ $key }}-port: {{ $val | quote }}
+  {{- end }}

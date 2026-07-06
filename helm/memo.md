@@ -14,3 +14,13 @@ sudo mv linux-amd64/helm /usr/local/bin/helm
 
 # 4. 다운로드했던 임시 파일 삭제
 rm -rf id linux-amd64 helm-v3.14.2-linux-amd64.tar.gz
+
+
+## template 해석 결과 출력
+helm template my-test .
+
+## 템플릿을 result.yaml파일로 얻기
+helm template my-test . > ./docs/result.yaml
+
+## install 을 모의로 해보기
+helm install my-test . --dry-run

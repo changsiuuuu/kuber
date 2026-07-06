@@ -1,0 +1,11 @@
+# 애플리케이션 기본 설정
+appEnv: "production"
+replicaCount: 3
+
+image:
+  repository: "nginx"
+  tag: "1.25.1"
+
+#모니터링 기능 활성화 여부 토글
+monitoring:
+  enabled: true   

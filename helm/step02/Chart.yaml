@@ -1,0 +1,6 @@
+apiVersion: v2
+name: micro-app
+description: A Helm chart for Microservices Deployment
+type: application
+version: 1.0.0
+appVersion: "2.4.1"

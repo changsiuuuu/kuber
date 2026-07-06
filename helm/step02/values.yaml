@@ -1,0 +1,20 @@
+apiVersion: v2
+name: micro-app
+description: A Helm chart for Microservices Deployment
+type: application
+version: 1.0.0
+appVersion: "2.4.1"
+
+
+
+
+
+# 애플리케이션 기본 설정
+appEnv: "development"
+replicaCount: 3
+
+# 이미지 설정
+image:
+  repository: "nginx"
+  # tag는 일부러 비워두어 default 함수가 작동하는지 테스트합니다.
+  tag: ""

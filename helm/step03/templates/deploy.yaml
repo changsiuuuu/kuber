@@ -1,0 +1,33 @@
+# deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-deployment
+  labels:
+    environment: {{ .Values.appEnv | upper | quote }}
+spec:
+  # [if/else 예제] 운영 환경(production)이면 레플리카를 values 값대로 쓰고, 아니면 무조건 1로 고정
+  {{- if eq .Values.appEnv "production" }}
+  replicas: {{ .Values.replicaCount }}
+  {{- else }}
+  replicas: 1
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+      # [if 예제] monitoring.enabled 가 true 일 때만 annotations 블록을 동적으로 생성
+      {{- if .Values.monitoring.enabled }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
+      {{- end }}
+    spec:
+      containers:
+      - name: web-container
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 80

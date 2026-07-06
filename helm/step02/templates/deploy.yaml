@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-deployment  # Chart.yaml의 name을 가져옴
+  labels:
+    # appEnv 문법을 대문자로 바꾸고 쌍따옴표로 안전하게 감싸기
+    environment: {{ .Values.appEnv | upper | quote }}
+spec:
+  # values.yaml의 replicaCount 주입
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+      - name: web-container
+        # tag 값이 비어있다면(.Values.image.tag가 빈 문자열이면) "latest"를 기본값으로 사용!
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default "latest" }}"
+        ports:
+        - containerPort: 80
