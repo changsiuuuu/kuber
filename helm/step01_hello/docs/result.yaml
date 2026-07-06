@@ -1,0 +1,31 @@
+---
+# Source: test/templates/ingress-rule.yaml
+# templates/ingress-rule.yamlapiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  # 배포시의 이름을 .Release.Name으로 참조할수있다
+  name: "my-release-ingress"
+spec:
+  ingressClassName: aaa 
+  rules:
+    - host: leechs.shop
+      http:
+        paths:
+          - path: /market
+            pathType: Prefix
+            backend: 
+              service:
+                name: svc-market-app
+                port: 8000
+          - path: /posts
+            pathType: Prefix
+            backend: 
+              service:
+                name: svc-post-app
+                port: 8000
+          - path: /
+            pathType: Prefix
+            backend: 
+              service:
+                name: svc-index-app
+                port: 80

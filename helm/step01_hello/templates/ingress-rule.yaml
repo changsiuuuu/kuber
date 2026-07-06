@@ -8,10 +8,15 @@ metadata:
 spec:
   ingressClassName: aaa 
   rules:
-    - host: aaa.com
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           {{- range .Values.ingress.paths }}
-
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend: 
+              service:
+                name: {{ .serviceName }}
+                port: {{ .port }}
           {{- end}}
 {{- end -}}

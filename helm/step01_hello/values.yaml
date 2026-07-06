@@ -3,7 +3,7 @@
 ingress:
   enabled: true
   className: "nginx"
-  host: "cloud-learning.site" #  도메인을 동적 주입
+  host: "leechs.shop" #  도메인을 동적 주입
  
   # 마이크로서비스 경로 구조를 배열 형태로 깔끔하게 관리!
   paths:
