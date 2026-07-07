@@ -1,0 +1,9 @@
+# my-values.yaml
+
+# ArgoCD 웹서버(ui) 의 네트워크 설정 전달하기
+server:
+  service:
+    type: ClusterIP
+  # https 외에 http 로도 접속 가능하도록 
+  extraArgs:
+    - --insecure
