@@ -1,0 +1,9 @@
+# argocd/my-values.yaml
+
+# ArgoCD 웹서버(UI)의 네트워크 설정 전달하기
+server:
+  service:
+    type: LoadBalancer
+  # https 외에 http로도 접속 가능하도록 
+  extraArgs:
+    - --insecure
