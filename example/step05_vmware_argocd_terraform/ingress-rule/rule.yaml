@@ -1,0 +1,34 @@
+# ingress-rule/rule.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-rule
+  namespace: default
+spec:
+  # 배포한 ingress-controller 와 연결고리가 되는 ingressClassName: nginx
+  ingressClassName: nginx
+  rules:
+  - http:
+      # nginx 는 L7 장비이기 때문에 요청경로, 요청 url 등의 정보를 모두 인식 할수 있다.
+      paths:
+      - path: /market
+        pathType: Prefix # /market 이라는 접두어로 인식, 뒤에 다른 경로가 추가 되어도 된다.
+        backend:
+          service:
+            name: svc-market-app # market pod 로 갈수 있는 서비스의 이름을 명시한다
+            port:
+              number: 8000
+      - path: /posts
+        pathType: Prefix # /posts 이라는 접두어로 인식, 뒤에 다른 경로가 추가 되어도 된다.
+        backend:
+          service:
+            name: svc-post-app # post pod 로 갈수 있는 서비스의 이름을 명시한다
+            port:
+              number: 8000
+      - path: /
+        pathType: Prefix
+        backend: 
+          service:
+            name: svc-index-app # market pod 로 갈수 있는 서비스의 이름을 명시한다
+            port:
+              number: 80

@@ -1,0 +1,7 @@
+# values.yaml
+
+appSettings:
+  metadata:
+    author: "clouds"
+    team: "devops"
+    location: "busan"

@@ -1,0 +1,13 @@
+# deploy.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: test
+data:
+    {{- with .Values.appSettings.metadata }}
+    app-author: {{ .author }}
+    app-team: {{ .team }}
+    location: {{ .location }}
+    # global 영역의 Chart를 참조하기 위해서는 $. 해서 참조한다
+    chart-name: {{ $.Chart.Name }}
+    {{- end}}

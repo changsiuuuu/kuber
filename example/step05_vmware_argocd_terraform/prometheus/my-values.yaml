@@ -1,0 +1,13 @@
+# prometheus/my-values.yaml
+grafana:
+  adminPassword: "admin" # 비밀번호를 쉽게 고정
+  service:
+    type: LoadBalancer # 또는 LoadBalancer
+
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false 
+  service:
+    type: NodePort
+    nodePort: 32100
