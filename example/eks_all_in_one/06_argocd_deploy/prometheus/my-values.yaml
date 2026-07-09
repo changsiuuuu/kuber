@@ -1,0 +1,13 @@
+# prometheus/my-values.yaml 파일 
+grafana:
+  adminPassword: "admin" # 비밀번호를 쉽게 고정
+  service:
+    type: ClusterIP # 또는 LoadBalancer
+    #nodePort: 32000
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false 
+  service:
+    type: NodePort
+    nodePort: 32100

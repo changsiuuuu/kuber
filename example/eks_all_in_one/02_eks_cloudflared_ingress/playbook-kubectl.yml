@@ -1,0 +1,18 @@
+---
+- name: 로컬 PC에서 K8s로 Cloudflare 터널 및 앱 배포하기
+  hosts: localhost      # [핵심] SSH 타지 말고 내 PC(로컬)에서 바로 실행해!
+  connection: local     # [핵심] 로컬 실행 모드
+  gather_facts: false   # 시간 단축을 위해 팩트 수집 끄기
+
+  tasks:
+    - name: 1. Cloudflare 터널 토큰을 K8s Secret으로 생성 ( 덮어쓰기)
+      shell: |
+        kubectl create secret generic tunnel-credentials \
+          --from-literal=token={{ tunnel_token }} \
+          --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: 2. Cloudflared 파드 및 K8s 매니페스트 배포
+      shell: |
+        kubectl apply -f deploy-cloudflared.yaml
+        # 나중에 web-app.yaml 이나 ingress-rule.yaml 이 추가되면 
+        # 여기에 한 줄씩 하시면 됩니다!

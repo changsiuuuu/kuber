@@ -1,4 +1,3 @@
-# 01_infra/main.tf
 
 # terraform 을 이용해서 argocd helm 설치, nginx-ingress-controller helm 설치
 
@@ -29,29 +28,6 @@ provider "helm" {
   }
 }
 
-# helm provider 가 동작할 준비가 되어 있으면 "helm_release" 를 사용할수 있다.
-resource "helm_release" "ingress_nginx" {
-  name             = "ingress-nginx"
-  # helm 저장소의 위치
-  repository       = "https://kubernetes.github.io/ingress-nginx"
-  # chart 의 이름
-  chart            = "ingress-nginx"
-  # chart 버전
-  version          = "4.11.0"
-  # namespace 설정 
-  namespace        = "ingress-nginx"
-  create_namespace = true
-}
-
-# 테스트로 local 폴더에 있는 ingress rule yaml 파일을 terraform 으로 직접 배포하기
-resource "kubernetes_manifest" "ingress_from_file" {
-    # ingress nginx 가 설치된 이후에 실행되도록
-    depends_on = [helm_release.ingress_nginx]
-    # 주의!  yaml 파일에는 한종류의 deploy, svc 등이 있어야 한다
-    # --- 로 구분해서 여러 종류의 배포는 되지 않는다
-    # namespace 도 반드시 명시해야한다 
-    manifest = yamldecode(file("${path.module}/ingress-rule/rule.yaml"))
-}
 
 # helm provider 가 동작할 준비가 되어 있으면 "helm_release" 를 사용할수 있다.
 resource "helm_release" "argocd" {
@@ -61,10 +37,20 @@ resource "helm_release" "argocd" {
   # chart 의 이름
   chart            = "argo-cd"
   # chart 버전
-  version          = "3.35.4"
+  version          = "10.1.2"
   # namespace 설정 
   namespace        = "argocd"
   create_namespace = true
   # my-values.yaml 파일을 읽어서 설치 하도록 한다 
-  values = [ file("${path.module}/argocd/my-values.yaml") ]
+  values = [ file("${path.module}/my-values.yaml") ]
+  set {
+    name  = "configs.secret.argocdServerAdminPassword"
+    # htpasswd (bcrypt) 형태로 변환하여 주입
+    value = bcrypt("@abcd1234") 
+  }
+  # ArgoCD 핵심 서버 서비스 타입을 여기서 변경할수도있다. ClusterIP or LoadBalancer
+  #set {
+  #  name  = "server.service.type"
+  #  value = "ClusterIP"
+  #}
 }

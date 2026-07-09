@@ -1,0 +1,44 @@
+# tailscale-deployment.yaml 파일
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tailscale-router
+  namespace: tailscale
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tailscale
+  template:
+    metadata:
+      labels:
+        app: tailscale
+    spec:
+      serviceAccountName: tailscale-sa
+      containers:
+      - name: tailscale
+        image: tailscale/tailscale:latest
+        env:
+        - name: TS_AUTHKEY
+          valueFrom:
+            secretKeyRef:
+              name: tailscale-auth
+              key: TS_AUTHKEY
+        - name: TS_ROUTES
+          value: "10.0.0.0/16,172.20.0.0/16"
+        - name: TS_USERSPACE
+          value: "false"
+        
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+        
+        volumeMounts:
+        - name: tun
+          mountPath: /dev/net/tun
+      
+      volumes:
+      - name: tun
+        hostPath:
+          path: /dev/net/tun

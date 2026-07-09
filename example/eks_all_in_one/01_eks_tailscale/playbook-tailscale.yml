@@ -1,0 +1,24 @@
+# playbook-tailscale.yml
+---
+- name: EKS 클러스터에 Tailscale Subnet Router 배포
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - name: 1. Tailscale 전용 네임스페이스 생성
+      ansible.builtin.shell: >
+        kubectl create namespace tailscale --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: 2. Tailscale Auth Key 시크릿 생성
+      ansible.builtin.shell: >
+        kubectl create secret generic tailscale-auth
+        --namespace=tailscale
+        --from-literal=TS_AUTHKEY='{{ tailscale_auth_key }}'
+        --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: 3. Tailscale RBAC (권한) 설정 파일 적용
+      ansible.builtin.shell: kubectl apply -f tailscale-rbac.yaml
+
+    - name: 4. Tailscale Subnet Router (Deployment) 설정 파일 적용
+      ansible.builtin.shell: kubectl apply -f tailscale-deployment.yaml

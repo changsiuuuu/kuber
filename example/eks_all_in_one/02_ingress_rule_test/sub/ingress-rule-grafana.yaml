@@ -1,0 +1,29 @@
+# 05-ingress-rule-grafana.yaml 파일
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  # ingress rule 의 이름은 유일해야 한다
+  name: ingress-rule-grafana
+  # 연결할 서비스가 속해있는 namespace 에 배포가되어야한다
+  namespace: prometheus
+
+spec:
+  # 배포한 ingress-controller 와 연결고리가 되는 ingressClassName
+  ingressClassName: nginx
+
+  rules:
+    # 접속할 도메인
+    - host: grafana.leechs.shop
+      http:
+        # URL 경로별 라우팅 규칙
+        paths:
+          # 모든 요청(/)을 argocd-server 서비스로 전달
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                # 네임스페이스에 존재하는 Service
+                name: prometheus-stack-grafana
+                port:
+                  # Service의 80번 포트로 연결
+                  number: 80
